@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginBoxAction {
 
-    public  String getBoxRedirect() {
+    public String getBoxRedirect() {
 
         return ConfigBox.box_redirect
                 + "?response_type=code"

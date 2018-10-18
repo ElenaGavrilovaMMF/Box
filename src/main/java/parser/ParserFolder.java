@@ -1,29 +1,25 @@
 package parser;
 
-import action.FileAction;
 import action.FolderAction;
-import com.box.sdk.BoxFile;
-import com.box.sdk.BoxFolder;
 import com.box.sdk.BoxItem;
+import entity.Folder;
 import lombok.NoArgsConstructor;
+import repository.FolderRepository;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 public class ParserFolder {
 
-    public static void parseFolder(BoxItem.Info itemInfo) {
+    public static void parse(BoxItem.Info itemInfo, String idParent) {
         FolderAction folderAction = new FolderAction();
         if (folderAction.isFolder(itemInfo)) {
-            BoxFolder folder = new BoxFolder(itemInfo.getResource().getAPI(), itemInfo.getID());
-            folderAction.addBoxFolder(folder);
-            ArrayList<BoxItem.Info> child = folderAction.getChild(folder);
+            List<BoxItem.Info> child = folderAction.getChild(itemInfo);
+            FolderRepository.getInstance().addFolder(new Folder(itemInfo, idParent));
             for (BoxItem.Info info : child) {
-                parseFolder(info);
+                parse(info, itemInfo.getID());
             }
-        } else {
-            BoxFile file = new BoxFile(itemInfo.getResource().getAPI(), itemInfo.getID());
-            new FileAction().addBoxFile(file);
         }
     }
 }
+
