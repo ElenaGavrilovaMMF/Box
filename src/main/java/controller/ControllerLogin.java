@@ -1,10 +1,8 @@
 package controller;
 
-import action.LoginBoxAction;
 import com.box.sdk.BoxAPIConnection;
 import com.box.sdk.BoxFolder;
 import com.box.sdk.BoxItem;
-import config.ConfigBox;
 import entity.Folder;
 import parser.ParserFolder;
 import repository.FolderRepository;
@@ -22,28 +20,20 @@ import java.io.IOException;
 public class ControllerLogin extends HttpServlet {
 
     private static final String ID_ROOT_FOLDER = "0";
+    private static final String TOKEN = "FsOZV9Q0HqC4Bb640lWfoNutHJKDlGRZ";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        BoxAPIConnection apiClient = getAPIClient(req, resp);
+        BoxAPIConnection boxAPIConnection = new BoxAPIConnection(TOKEN);
+
         HttpSession session = req.getSession();
-        session.setAttribute("api",apiClient);
-        BoxFolder rootFolder = BoxFolder.getRootFolder(apiClient);
+        session.setAttribute("api",boxAPIConnection);
+
+        BoxFolder rootFolder = BoxFolder.getRootFolder(boxAPIConnection);
         FolderRepository.getInstance().addFolder(new Folder(rootFolder.getInfo(), null));
         for (BoxItem.Info info : rootFolder) {
             ParserFolder.parse(info, ID_ROOT_FOLDER);
         }
         Redirector.redirectShow(req, resp, rootFolder);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        req.setCharacterEncoding("utf-8");
-        res.sendRedirect(new LoginBoxAction().getBoxRedirect());
-    }
-
-    private BoxAPIConnection getAPIClient(HttpServletRequest req, HttpServletResponse resp) {
-        String code = req.getParameter("code");
-        return new BoxAPIConnection(ConfigBox.client_id, ConfigBox.client_secret, code);
     }
 }

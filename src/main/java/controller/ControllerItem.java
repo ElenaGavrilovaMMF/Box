@@ -3,6 +3,7 @@ package controller;
 import com.box.sdk.BoxAPIConnection;
 import com.box.sdk.BoxFile;
 import com.box.sdk.BoxFolder;
+import com.box.sdk.BoxItem;
 import entity.Folder;
 import repository.FolderRepository;
 import service.Redirector;
@@ -34,7 +35,15 @@ public class ControllerItem extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("searchTerm") != null) {
+        if (req.getParameter("link") != null) {
+            BoxItem.Info info;
+            if (FolderRepository.getInstance().getFolder(req.getParameter("id")) != null) {
+                info = new BoxFolder((BoxAPIConnection) req.getSession().getAttribute("api"), req.getParameter("id")).getInfo();
+            } else {
+                info = new BoxFile((BoxAPIConnection) req.getSession().getAttribute("api"), req.getParameter("id")).getInfo();
+            }
+            Redirector.redirectShow(req, resp, info);
+        } else if (req.getParameter("searchTerm") != null) {
             Redirector.redirectShow(req, resp, req.getParameter("type"));
         } else {
             Redirector.redirectShow(req, resp);

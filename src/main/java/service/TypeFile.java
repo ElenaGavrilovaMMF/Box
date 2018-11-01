@@ -5,8 +5,6 @@ import java.util.List;
 
 public enum TypeFile {
     FILE {
-        String value = "file";
-
         @Override
         public String getValue() {
             return "file";

@@ -11,11 +11,22 @@
 <html>
 <head>
     <title>SearchResult</title>
+    <style>
+        .prokrutka {
+            height: 500px;
+            width: 50%;
+            background: #fff;
+            border: 1px solid #C1C1C1;
+            overflow-x: scroll;
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <body>
 <h3>Search</h3>
 <form action="${pageContext.request.contextPath}/page?idCurrentFolder=${requestScope.id}" method="post">
     <input type="text" size="50" name="searchTerm" value="${requestScope.searchTerm}">
+    type:
     <select name="type">
         <optgroup label="Select Type">
             <option value=""></option>
@@ -26,12 +37,19 @@
     <input type="submit" class="submit" value="Search"><br>
 </form>
 
-<c:if test="${not empty id}">
-    <a href="${pageContext.request.contextPath}/page?id=${id}"> Назад</a>
+<c:if test="${not empty requestScope.id}">
+    <a href="${pageContext.request.contextPath}/page?id=${requestScope.id}"> Back</a>
 </c:if>
 <h3>Result Search</h3>
-<c:forEach items="${files}" var="file">
+<c:if test="${not empty requestScope.files}">
+<div class="prokrutka">
+    <c:forEach items="${requestScope.files}" var="file">
     <p><a href="${pageContext.request.contextPath}/page?id=${file.id}">${file.name}</a></p>
-</c:forEach>
+    </c:forEach>
+</div>
+</c:if>
+<c:if test="${not empty requestScope.error}">
+    <p style="color: darkred;">${requestScope.error}</p>
+</c:if>
 </body>
 </html>

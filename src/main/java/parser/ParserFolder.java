@@ -3,12 +3,13 @@ package parser;
 import action.FolderAction;
 import com.box.sdk.BoxItem;
 import entity.Folder;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import repository.FolderRepository;
 
 import java.util.List;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParserFolder {
 
     public static void parse(BoxItem.Info itemInfo, String idParent) {

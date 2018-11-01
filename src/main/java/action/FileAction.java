@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 public class FileAction {
     private final ArrayList<File> BOX_FILES = new ArrayList();
 

@@ -13,10 +13,6 @@ public class FolderRepository {
 
     private Map<String, Folder> allFolder = new HashMap<>();
 
-    public Map<String, Folder> getAllFolder() {
-        return allFolder;
-    }
-
     public Folder getFolder(String id) {
         return allFolder.get(id);
     }
